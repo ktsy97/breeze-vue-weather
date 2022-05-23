@@ -28,4 +28,7 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/list', [App\Http\Controllers\WeatherController::class, 'index'])->middleware(['auth', 'verified'])->name('city.list');
+Route::get('/city', [App\Http\Controllers\WeatherController::class, 'show'])->middleware(['auth', 'verified'])->name('city.show');
+
 require __DIR__.'/auth.php';
