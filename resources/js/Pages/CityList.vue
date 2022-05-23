@@ -32,15 +32,15 @@ import { Inertia } from "@inertiajs/inertia";
         <!-- カード一覧 -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           <!-- カード -->
-          <div class="col">
+          <div class="col" v-for="(item, index) in data" :key="index">
             <a href="#">
               <div class="card-wrapper">
                 <div class="city-card p-4 rounded-lg">
-                  <p class="city-card-title mt-2 mb-3">都市名:東京都</p>
-                  <p class="city-card-text">気温:30&deg;C</p>
-                  <p class="city-card-text">天候:晴れ</p>
+                  <p class="city-card-title mt-2 mb-3">都市名:{{ item.name }}</p>
+                  <p class="city-card-text">気温:{{ item.main.temp }}&deg;C</p>
+                  <p class="city-card-text">天候:{{ item.weather[0].main }}</p>
                   <p class="flex justify-center">
-                    <img :src="`http://openweathermap.org/img/wn/01d@2x.png`" />
+                    <img :src="`http://openweathermap.org/img/wn/${item.weather[0].icon}.png`" />
                   </p>
                 </div>
               </div>
@@ -87,3 +87,13 @@ import { Inertia } from "@inertiajs/inertia";
   color: #495057;
 }
 </style>
+
+<script>
+export default {
+  props: {
+    data: {
+      type: Array,
+    },
+  },
+}
+</script>
