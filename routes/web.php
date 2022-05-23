@@ -30,6 +30,6 @@ Route::get('/dashboard', function () {
 
 Route::get('/list', [App\Http\Controllers\WeatherController::class, 'index'])->middleware(['auth', 'verified'])->name('city.list');
 Route::post('/list', [App\Http\Controllers\WeatherController::class, 'index'])->name('example.select');
-Route::get('/city', [App\Http\Controllers\WeatherController::class, 'show'])->middleware(['auth', 'verified'])->name('city.show');
+Route::get('/city/{city_name}', [App\Http\Controllers\WeatherController::class, 'show'])->middleware(['auth', 'verified'])->name('city.show');
 
 require __DIR__.'/auth.php';

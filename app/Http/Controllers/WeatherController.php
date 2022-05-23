@@ -68,8 +68,22 @@ class WeatherController extends Controller
         ]);
     }
 
-    public function show(Request $request)
+    public function show($city_name)
     {
-        return Inertia::render('CityShow');
+        $cityName = $city_name;
+
+        $apiKey = config('services.weather.key');
+
+        $method = "GET";
+        $client = new Client();
+
+        $current_url = "http://api.openweathermap.org/data/2.5/weather?units=metric&lang=ja&q=$cityName&appid=$apiKey";
+
+        $response = $client->request($method, $current_url);
+        $current = json_decode($response->getBody(), true);
+
+        return Inertia::render('CityShow',[
+            'current' => $current,
+        ]);
     }
 }

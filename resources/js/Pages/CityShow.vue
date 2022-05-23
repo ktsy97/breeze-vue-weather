@@ -5,11 +5,13 @@ import { Inertia } from "@inertiajs/inertia";
 </script>
 
 <template>
-  <Head title="東京都" />
+  <Head :title="`${current.name}`" />
 
   <BreezeAuthenticatedLayout>
     <template #header>
-      <h2 class="font-semibold text-xl text-gray-800 leading-tight">東京都</h2>
+      <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        {{ current.name }}
+      </h2>
     </template>
 
     <div class="py-12">
@@ -19,16 +21,19 @@ import { Inertia } from "@inertiajs/inertia";
             <h1 class="text-center text-lg mb-2">現在の天気</h1>
             <div class="grid grid-cols-2 gap-4">
               <div class="col text-center">
-                <p>天候:晴れ</p>
+                <p>天候:{{ current.weather[0].main }}</p>
                 <p class="flex justify-center">
-                  <img :src="`http://openweathermap.org/img/wn/01d@2x.png`" />
+                  <img
+                    :src="`http://openweathermap.org/img/wn/${current.weather[0].icon}@2x.png`"
+                  />
                 </p>
               </div>
               <div class="col text-center flex flex-col justify-center">
-                <p>気温:30&deg;C</p>
-                <p>体感気温:31&deg;C</p>
-                <p>大気圧:1000hPa</p>
-                <p>湿度:60%</p>
+                <p>気温:{{ current.main.temp }}&deg;C</p>
+                <p>体感気温:{{ current.main.feels_like }}&deg;C</p>
+                <p>大気圧:{{ current.main.pressure }}hPa</p>
+                <p>湿度:{{ current.main.humidity }}%</p>
+                <p>風速:秒速{{ current.wind.speed }}メートル</p>
               </div>
             </div>
           </div>
@@ -153,6 +158,11 @@ import { PieChart, LineChart } from "vue-chart-3";
 Chart.register(...registerables);
 
 export default defineComponent({
+  props: {
+    current: {
+      type: Array,
+    },
+  },
   components: {
     PieChart,
     LineChart,

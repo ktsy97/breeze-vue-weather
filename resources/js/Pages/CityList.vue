@@ -1,5 +1,6 @@
 <script setup>
 import { Head } from "@inertiajs/inertia-vue3";
+import { Link } from '@inertiajs/inertia-vue3';
 import BreezeAuthenticatedLayout from "@/Layouts/Authenticated.vue";
 import { Inertia } from "@inertiajs/inertia";
 </script>
@@ -33,7 +34,7 @@ import { Inertia } from "@inertiajs/inertia";
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           <!-- カード -->
           <div class="col" v-for="(item, index) in data" :key="index">
-            <a href="#">
+            <Link :href="`/city/${item.name}`">
               <div class="card-wrapper">
                 <div class="city-card p-4 rounded-lg">
                   <p class="city-card-title mt-2 mb-3">{{ item.name }}</p>
@@ -44,7 +45,7 @@ import { Inertia } from "@inertiajs/inertia";
                   </p>
                 </div>
               </div>
-            </a>
+            </Link>
           </div>
         </div>
       </div>
