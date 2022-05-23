@@ -13,4 +13,12 @@ class WeatherController extends Controller
             'CityList',
         );
     }
+
+    public function show(Request $request)
+    {
+        return Inertia::render(
+            'CityShow',
+        );
+    }
+
 }
