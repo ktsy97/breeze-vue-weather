@@ -63,7 +63,7 @@ class WeatherController extends Controller
             $data[] = json_decode($response->getBody(), true);
         }
 
-        return Inertia::render('CityList',[
+        return Inertia::render('CityList', [
             'data' => $data,
         ]);
     }
@@ -78,12 +78,28 @@ class WeatherController extends Controller
         $client = new Client();
 
         $current_url = "http://api.openweathermap.org/data/2.5/weather?units=metric&lang=ja&q=$cityName&appid=$apiKey";
+        $current_response = $client->request($method, $current_url);
+        $current = json_decode($current_response->getBody(), true);
 
-        $response = $client->request($method, $current_url);
-        $current = json_decode($response->getBody(), true);
+        $forecast_url = "http://api.openweathermap.org/data/2.5/forecast?units=metric&lang=ja&q=$cityName&appid=$apiKey";
+        $forecast_response = $client->request($method, $forecast_url);
+        $forecast = json_decode($forecast_response->getBody(), true);
 
-        return Inertia::render('CityShow',[
+        foreach ($forecast["list"] as $item) {
+            $date[] = date('Y/m/d H:i', $item["dt"]);
+        }
+
+        for ($i = 0; $i <= 7; $i++) {
+            $chart_date[] = date('H:i', $forecast["list"][$i]["dt"]);
+            $chart_temp[] = $forecast["list"][$i]["main"]["temp"];
+        }
+
+        return Inertia::render('CityShow', [
             'current' => $current,
+            'forecast' => $forecast,
+            'date' => $date,
+            'chart_date' => $chart_date,
+            'chart_temp' => $chart_temp,
         ]);
     }
 }

@@ -1,6 +1,6 @@
 <script setup>
 import { Head } from "@inertiajs/inertia-vue3";
-import { Link } from '@inertiajs/inertia-vue3';
+import { Link } from "@inertiajs/inertia-vue3";
 import BreezeAuthenticatedLayout from "@/Layouts/Authenticated.vue";
 import { Inertia } from "@inertiajs/inertia";
 </script>
@@ -39,9 +39,13 @@ import { Inertia } from "@inertiajs/inertia";
                 <div class="city-card p-4 rounded-lg">
                   <p class="city-card-title mt-2 mb-3">{{ item.name }}</p>
                   <p class="city-card-text">気温:{{ item.main.temp }}&deg;C</p>
-                  <p class="city-card-text">天候:{{ item.weather[0].main }}</p>
+                  <p class="city-card-text">
+                    天候:{{ item.weather[0].description }}
+                  </p>
                   <p class="flex justify-center">
-                    <img :src="`http://openweathermap.org/img/wn/${item.weather[0].icon}.png`" />
+                    <img
+                      :src="`http://openweathermap.org/img/wn/${item.weather[0].icon}.png`"
+                    />
                   </p>
                 </div>
               </div>
@@ -108,5 +112,5 @@ export default {
       });
     },
   },
-}
+};
 </script>
