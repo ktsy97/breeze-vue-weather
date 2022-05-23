@@ -16,7 +16,7 @@ import { Inertia } from "@inertiajs/inertia";
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <!-- セレクトボックス -->
         <div class="flex justify-center area-select pb-4">
-          <select class="form-select rounded">
+          <select class="form-select rounded" v-on:change="select">
             <option value="0">お気に入り</option>
             <option value="1">北海道・東北</option>
             <option value="2">関東・甲信</option>
@@ -36,7 +36,7 @@ import { Inertia } from "@inertiajs/inertia";
             <a href="#">
               <div class="card-wrapper">
                 <div class="city-card p-4 rounded-lg">
-                  <p class="city-card-title mt-2 mb-3">都市名:{{ item.name }}</p>
+                  <p class="city-card-title mt-2 mb-3">{{ item.name }}</p>
                   <p class="city-card-text">気温:{{ item.main.temp }}&deg;C</p>
                   <p class="city-card-text">天候:{{ item.weather[0].main }}</p>
                   <p class="flex justify-center">
@@ -93,6 +93,18 @@ export default {
   props: {
     data: {
       type: Array,
+    },
+  },
+  methods: {
+    select: function (e) {
+      this.val = e.target.value;
+      this.$inertia.visit(route("example.select"), {
+        method: "post", //POSTメソッドで送信
+        data: {
+          area: this.val, //送信データを指定
+        },
+        preserveState: true,
+      });
     },
   },
 }
