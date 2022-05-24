@@ -200,5 +200,22 @@ export default defineComponent({
       };
     },
   },
+  methods: {
+    fav: function (e) {
+      axios
+        .post("/city/fav", {
+          status: this.status,
+          city_id: this.city_id,
+        })
+        .then(
+          function (res) {
+            this.status = res.data;
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+  },
 });
 </script>

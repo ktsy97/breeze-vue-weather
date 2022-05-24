@@ -23914,6 +23914,18 @@ var __default__ = (0,vue__WEBPACK_IMPORTED_MODULE_1__.defineComponent)({
         }]
       };
     }
+  },
+  methods: {
+    fav: function fav(e) {
+      axios.post("/city/fav", {
+        status: this.status,
+        city_id: this.city_id
+      }).then(function (res) {
+        this.status = res.data;
+      }.bind(this))["catch"](function (error) {
+        console.log(error);
+      });
+    }
   }
 });
 
