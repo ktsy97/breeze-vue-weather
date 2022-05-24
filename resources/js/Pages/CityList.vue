@@ -1,5 +1,6 @@
 <script setup>
 import { Head } from "@inertiajs/inertia-vue3";
+import { Link } from "@inertiajs/inertia-vue3";
 import BreezeAuthenticatedLayout from "@/Layouts/Authenticated.vue";
 import { Inertia } from "@inertiajs/inertia";
 </script>
@@ -16,7 +17,7 @@ import { Inertia } from "@inertiajs/inertia";
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <!-- セレクトボックス -->
         <div class="flex justify-center area-select pb-4">
-          <select class="form-select rounded">
+          <select class="form-select rounded" v-on:change="select">
             <option value="0">お気に入り</option>
             <option value="1">北海道・東北</option>
             <option value="2">関東・甲信</option>
@@ -32,19 +33,23 @@ import { Inertia } from "@inertiajs/inertia";
         <!-- カード一覧 -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           <!-- カード -->
-          <div class="col">
-            <a href="#">
+          <div class="col" v-for="(item, index) in data" :key="index">
+            <Link :href="route('city.show', { city_id: item.id })">
               <div class="card-wrapper">
                 <div class="city-card p-4 rounded-lg">
-                  <p class="city-card-title mt-2 mb-3">都市名:東京都</p>
-                  <p class="city-card-text">気温:30&deg;C</p>
-                  <p class="city-card-text">天候:晴れ</p>
+                  <p class="city-card-title mt-2 mb-3">{{ item.name }}</p>
+                  <p class="city-card-text">気温:{{ item.main.temp }}&deg;C</p>
+                  <p class="city-card-text">
+                    天候:{{ item.weather[0].description }}
+                  </p>
                   <p class="flex justify-center">
-                    <img :src="`http://openweathermap.org/img/wn/01d@2x.png`" />
+                    <img
+                      :src="`http://openweathermap.org/img/wn/${item.weather[0].icon}.png`"
+                    />
                   </p>
                 </div>
               </div>
-            </a>
+            </Link>
           </div>
         </div>
       </div>
@@ -87,3 +92,25 @@ import { Inertia } from "@inertiajs/inertia";
   color: #495057;
 }
 </style>
+
+<script>
+export default {
+  props: {
+    data: {
+      type: Array,
+    },
+  },
+  methods: {
+    select: function (e) {
+      this.val = e.target.value;
+      this.$inertia.visit(route("example.select"), {
+        method: "post", //POSTメソッドで送信
+        data: {
+          area: this.val, //送信データを指定
+        },
+        preserveState: true,
+      });
+    },
+  },
+};
+</script>
