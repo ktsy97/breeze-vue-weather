@@ -10,7 +10,6 @@ class WeatherController extends Controller
 {
     public function index(Request $request)
     {
-
         $area = $request->area;
 
         switch ($area) {
@@ -68,20 +67,18 @@ class WeatherController extends Controller
         ]);
     }
 
-    public function show($city_name)
+    public function show($city_id)
     {
-        $cityName = $city_name;
-
         $apiKey = config('services.weather.key');
 
         $method = "GET";
         $client = new Client();
 
-        $current_url = "http://api.openweathermap.org/data/2.5/weather?units=metric&lang=ja&q=$cityName&appid=$apiKey";
+        $current_url = "http://api.openweathermap.org/data/2.5/weather?units=metric&lang=ja&id=$city_id&appid=$apiKey";
         $current_response = $client->request($method, $current_url);
         $current = json_decode($current_response->getBody(), true);
 
-        $forecast_url = "http://api.openweathermap.org/data/2.5/forecast?units=metric&lang=ja&q=$cityName&appid=$apiKey";
+        $forecast_url = "http://api.openweathermap.org/data/2.5/forecast?units=metric&lang=ja&id=$city_id&appid=$apiKey";
         $forecast_response = $client->request($method, $forecast_url);
         $forecast = json_decode($forecast_response->getBody(), true);
 
