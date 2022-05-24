@@ -12,44 +12,62 @@ class WeatherController extends Controller
 {
     public function index(Request $request)
     {
+        $user = Auth::user();
+
         $area = $request->area;
 
         switch ($area) {
             case 1:
                 // 北海道・東北
-                $cityNames = ['北海道', '青森県', '岩手県', '宮城県', '秋田県', '山形県', '福島県'];
+                // ['北海道', '青森県', '岩手県', '宮城県', '秋田県', '山形県', '福島県'];
+                $city_ids = ['2130037', '2130656', '2112518', '2111888', '2113124', '2110554', '2112922'];
                 break;
             case 2:
                 // 関東・甲信
-                $cityNames = ['茨城県', '栃木県', '群馬県', '埼玉県', '千葉県', '東京都', '神奈川県', '山梨県', '長野県'];
+                // ['茨城県', '栃木県', '群馬県', '埼玉県', '千葉県', '東京都', '神奈川県', '山梨県', '長野県'];
+                $city_ids = ['2112669', '1850310', '1863501', '1853226', '2113014', '1850144', '1860291', '1848649', '1856210'];
                 break;
             case 3:
                 // 北陸
-                $cityNames = ['新潟県', '富山県', '石川県', '福井県'];
+                // ['新潟県', '富山県', '石川県', '福井県'];
+                $city_ids = ['1855429', '1849872', '1861387', '1863983'];
                 break;
             case 4:
                 // 東海
-                $cityNames = ['愛知県', '岐阜県', '静岡県', '三重県'];
+                // ['愛知県', '岐阜県', '静岡県', '三重県'];
+                $city_ids = ['1865694', '1863640', '1851715', '1857352'];
                 break;
             case 5:
                 // 近畿
-                $cityNames = ['大阪府', '兵庫県', '京都府', '滋賀県', '奈良県', '和歌山県'];
+                // ['大阪府', '兵庫県', '京都府', '滋賀県', '奈良県', '和歌山県'];
+                $city_ids = ['1853904', '1862047', '1857907', '1852553', '1855608', '1848938'];
                 break;
             case 6:
                 // 中国
-                $cityNames = ['広島県', '岡山県', '山口県', '島根県', '鳥取県'];
+                // ['広島県', '岡山県', '山口県', '島根県', '鳥取県'];
+                $city_ids = ['1862413', '1854381', '1848681', '1852442', '1849890'];
                 break;
             case 7:
                 // 四国
-                $cityNames = ['香川県', '徳島県', '愛媛県', '高知県'];
+                // ['香川県', '徳島県', '愛媛県', '高知県'];
+                $city_ids = ['1860834', '1850157', '1864226', '1859133'];
                 break;
             case 8:
                 // 沖縄
-                $cityNames = ['福岡県', '佐賀県', '長崎県', '大分県', '熊本県', '宮崎県', '鹿児島県', '沖縄県'];
+                // ['福岡県', '佐賀県', '長崎県', '大分県', '熊本県', '宮崎県', '鹿児島県', '沖縄県'];
+                $city_ids = ['1863958', '1853299', '1856156', '1854484', '1858419', '1856710', '1860825', '1854345'];
                 break;
             default:
                 // お気に入り
-                $cityNames = ['東京都', '愛知県', '大阪府'];
+                $collection = Favorite::where('user_id', $user->id)->get();
+                $city_ids = $collection->pluck('city_id')->toArray();
+
+                if (empty($city_ids)) {
+                    // 配列が空であれば、falseを返す
+                    return Inertia::render('CityList', [
+                        'data_status' => false,
+                    ]);
+                }
                 break;
         }
 
@@ -58,14 +76,15 @@ class WeatherController extends Controller
         $method = "GET";
         $client = new Client();
 
-        foreach ($cityNames as $cityName) {
-            $url = "http://api.openweathermap.org/data/2.5/weather?units=metric&lang=ja&q=$cityName&appid=$apiKey";
+        foreach ($city_ids as $city_id) {
+            $url = "http://api.openweathermap.org/data/2.5/weather?units=metric&lang=ja&id=$city_id&appid=$apiKey";
             $response = $client->request($method, $url);
             $data[] = json_decode($response->getBody(), true);
         }
 
         return Inertia::render('CityList', [
             'data' => $data,
+            'data_status' => true,
         ]);
     }
 
