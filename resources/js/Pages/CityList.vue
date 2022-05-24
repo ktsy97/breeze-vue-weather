@@ -31,7 +31,10 @@ import { Inertia } from "@inertiajs/inertia";
         </div>
 
         <!-- カード一覧 -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
+          v-if="data_status"
+        >
           <!-- カード -->
           <div class="col" v-for="(item, index) in data" :key="index">
             <Link :href="route('city.show', { city_id: item.id })">
@@ -51,6 +54,9 @@ import { Inertia } from "@inertiajs/inertia";
               </div>
             </Link>
           </div>
+        </div>
+        <div class="text-center" v-else>
+          <p>お気に入りは登録されていません</p>
         </div>
       </div>
     </div>
@@ -98,6 +104,9 @@ export default {
   props: {
     data: {
       type: Array,
+    },
+    data_status: {
+      type: Boolean,
     },
   },
   methods: {

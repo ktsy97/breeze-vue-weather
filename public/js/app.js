@@ -23816,6 +23816,9 @@ var __default__ = {
   props: {
     data: {
       type: Array
+    },
+    data_status: {
+      type: Boolean
     }
   },
   methods: {
@@ -23892,6 +23895,11 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart.register.apply(chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart, _toConsumableArray(chart_js__WEBPACK_IMPORTED_MODULE_0__.registerables));
 
 var __default__ = (0,vue__WEBPACK_IMPORTED_MODULE_1__.defineComponent)({
+  data: function data() {
+    return {
+      status: this.result
+    };
+  },
   components: {
     PieChart: vue_chart_3__WEBPACK_IMPORTED_MODULE_2__.PieChart,
     LineChart: vue_chart_3__WEBPACK_IMPORTED_MODULE_2__.LineChart
@@ -23909,6 +23917,18 @@ var __default__ = (0,vue__WEBPACK_IMPORTED_MODULE_1__.defineComponent)({
         }]
       };
     }
+  },
+  methods: {
+    fav: function fav(e) {
+      axios.post("/city/fav", {
+        status: this.status,
+        city_id: this.city_id
+      }).then(function (res) {
+        this.status = res.data;
+      }.bind(this))["catch"](function (error) {
+        console.log(error);
+      });
+    }
   }
 });
 
@@ -23921,7 +23941,9 @@ var __default__ = (0,vue__WEBPACK_IMPORTED_MODULE_1__.defineComponent)({
     forecast: Object,
     date: Array,
     chart_date: Array,
-    chart_temp: Array
+    chart_temp: Array,
+    result: Boolean,
+    city_id: String
   },
   setup: function setup(__props, _ref) {
     var expose = _ref.expose;
@@ -25344,6 +25366,7 @@ var _hoisted_13 = /*#__PURE__*/_withScopeId(function () {
 
 var _hoisted_14 = [_hoisted_5, _hoisted_6, _hoisted_7, _hoisted_8, _hoisted_9, _hoisted_10, _hoisted_11, _hoisted_12, _hoisted_13];
 var _hoisted_15 = {
+  key: 0,
   "class": "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
 };
 var _hoisted_16 = {
@@ -25365,6 +25388,18 @@ var _hoisted_21 = {
   "class": "flex justify-center"
 };
 var _hoisted_22 = ["src"];
+var _hoisted_23 = {
+  key: 1,
+  "class": "text-center"
+};
+
+var _hoisted_24 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "お気に入りは登録されていません", -1
+  /* HOISTED */
+  );
+});
+
+var _hoisted_25 = [_hoisted_24];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["Head"], {
     title: "一覧"
@@ -25380,7 +25415,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         })
       }, _hoisted_14, 32
       /* HYDRATE_EVENTS */
-      )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" カード一覧 "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" カード "), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.data, function (item, index) {
+      )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" カード一覧 "), $props.data_status ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" カード "), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.data, function (item, index) {
         return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
           "class": "col",
           key: index
@@ -25410,7 +25445,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         , ["href"])]);
       }), 128
       /* KEYED_FRAGMENT */
-      ))])])])];
+      ))])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_23, _hoisted_25))])])];
     }),
     _: 1
     /* STABLE */
@@ -25441,22 +25476,43 @@ var _withScopeId = function _withScopeId(n) {
 };
 
 var _hoisted_1 = {
-  "class": "font-semibold text-xl text-gray-800 leading-tight"
+  "class": "flex items-center"
 };
 var _hoisted_2 = {
+  "class": "font-semibold text-xl text-gray-800 leading-tight"
+};
+
+var _hoisted_3 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+    "class": "normal"
+  }, "登録中", -1
+  /* HOISTED */
+  );
+});
+
+var _hoisted_4 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+    "class": "hover"
+  }, "登録解除", -1
+  /* HOISTED */
+  );
+});
+
+var _hoisted_5 = [_hoisted_3, _hoisted_4];
+var _hoisted_6 = {
   "class": "py-12"
 };
-var _hoisted_3 = {
+var _hoisted_7 = {
   "class": "max-w-7xl mx-auto sm:px-6 lg:px-8"
 };
-var _hoisted_4 = {
+var _hoisted_8 = {
   "class": "current-area"
 };
-var _hoisted_5 = {
+var _hoisted_9 = {
   "class": "city-card p-4 rounded-lg"
 };
 
-var _hoisted_6 = /*#__PURE__*/_withScopeId(function () {
+var _hoisted_10 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", {
     "class": "text-center text-lg mb-2"
   }, "現在の天気", -1
@@ -25464,27 +25520,27 @@ var _hoisted_6 = /*#__PURE__*/_withScopeId(function () {
   );
 });
 
-var _hoisted_7 = {
+var _hoisted_11 = {
   "class": "grid grid-cols-1 sm:grid-cols-2 gap-4"
 };
-var _hoisted_8 = {
+var _hoisted_12 = {
   "class": "col-span-1 text-center max-w-xs m-auto"
 };
-var _hoisted_9 = {
+var _hoisted_13 = {
   "class": "flex justify-center"
 };
-var _hoisted_10 = ["src"];
-var _hoisted_11 = {
+var _hoisted_14 = ["src"];
+var _hoisted_15 = {
   "class": "col-span-1 flex flex-col justify-center max-w-xs m-auto"
 };
-var _hoisted_12 = {
+var _hoisted_16 = {
   "class": "inline-block"
 };
-var _hoisted_13 = {
+var _hoisted_17 = {
   "class": "chart-area rounded-lg"
 };
 
-var _hoisted_14 = /*#__PURE__*/_withScopeId(function () {
+var _hoisted_18 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", {
     "class": "text-center text-lg mb-2"
   }, "24時間の気温", -1
@@ -25492,11 +25548,11 @@ var _hoisted_14 = /*#__PURE__*/_withScopeId(function () {
   );
 });
 
-var _hoisted_15 = {
+var _hoisted_19 = {
   "class": "table-area rounded-lg"
 };
 
-var _hoisted_16 = /*#__PURE__*/_withScopeId(function () {
+var _hoisted_20 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", {
     "class": "text-center text-lg mb-2"
   }, "5日間の天気予想", -1
@@ -25504,14 +25560,14 @@ var _hoisted_16 = /*#__PURE__*/_withScopeId(function () {
   );
 });
 
-var _hoisted_17 = {
+var _hoisted_21 = {
   "class": "scroll-table"
 };
-var _hoisted_18 = {
+var _hoisted_22 = {
   "class": "table"
 };
 
-var _hoisted_19 = /*#__PURE__*/_withScopeId(function () {
+var _hoisted_23 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
     "class": "px-4 py-2"
   }, "日時"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
@@ -25523,13 +25579,13 @@ var _hoisted_19 = /*#__PURE__*/_withScopeId(function () {
   );
 });
 
-var _hoisted_20 = {
+var _hoisted_24 = {
   "class": "border px-4 py-2"
 };
-var _hoisted_21 = {
+var _hoisted_25 = {
   "class": "border px-4 py-2"
 };
-var _hoisted_22 = {
+var _hoisted_26 = {
   "class": "border px-4 py-2"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -25539,18 +25595,30 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* PROPS */
   , ["title"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["BreezeAuthenticatedLayout"], null, {
     header: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.current.name), 1
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.current.name), 1
       /* TEXT */
-      )];
+      ), _ctx.status ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
+        key: 0,
+        "class": "btn-true rounded ml-3 text-sm font-semibold",
+        onClick: _cache[0] || (_cache[0] = function () {
+          return _ctx.fav && _ctx.fav.apply(_ctx, arguments);
+        })
+      }, _hoisted_5)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
+        key: 1,
+        "class": "btn-false rounded ml-3 text-sm font-semibold",
+        onClick: _cache[1] || (_cache[1] = function () {
+          return _ctx.fav && _ctx.fav.apply(_ctx, arguments);
+        })
+      }, " 登録 "))])];
     }),
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" 現在の天気エリア "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [_hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "天候:" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.current.weather[0].description), 1
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" 現在の天気エリア "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [_hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "天候:" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.current.weather[0].description), 1
       /* TEXT */
-      ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
+      ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
         src: "http://openweathermap.org/img/wn/".concat($props.current.weather[0].icon, "@2x.png")
       }, null, 8
       /* PROPS */
-      , _hoisted_10)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "気温:" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.current.main.temp) + "°C", 1
+      , _hoisted_14)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "気温:" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.current.main.temp) + "°C", 1
       /* TEXT */
       ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "体感気温:" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.current.main.feels_like) + "°C", 1
       /* TEXT */
@@ -25560,18 +25628,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       /* TEXT */
       ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "風速:" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.current.wind.speed) + "メートル/秒", 1
       /* TEXT */
-      )])])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" 24時間の気温エリア "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [_hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["LineChart"], {
+      )])])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" 24時間の気温エリア "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [_hoisted_18, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["LineChart"], {
         chartData: _ctx.lineData
       }, null, 8
       /* PROPS */
-      , ["chartData"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" 5日間の天気予想エリア "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [_hoisted_16, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_18, [_hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.forecast.list, function (item, index) {
+      , ["chartData"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" 5日間の天気予想エリア "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, [_hoisted_20, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_22, [_hoisted_23, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.forecast.list, function (item, index) {
         return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
           key: index
-        }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_20, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.date[index]), 1
+        }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_24, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.date[index]), 1
         /* TEXT */
-        ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_21, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.main.temp) + "°C", 1
+        ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_25, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.main.temp) + "°C", 1
         /* TEXT */
-        ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_22, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.weather[0].description), 1
+        ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_26, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.weather[0].description), 1
         /* TEXT */
         )]);
       }), 128
@@ -39268,7 +39336,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.city-card[data-v-6abf849e] {\n  background-color: white;\n  box-shadow: 0 2px 5px #ccc;\n}\n.chart-area[data-v-6abf849e] {\n  padding: 1rem;\n  margin-top: 1rem;\n  background-color: white;\n  box-shadow: 0 2px 5px #ccc;\n}\n.table-area[data-v-6abf849e] {\n  margin-top: 1rem;\n  padding: 1rem;\n  background-color: white;\n  box-shadow: 0 2px 5px #ccc;\n}\n.scroll-table[data-v-6abf849e] {\n  overflow: auto;\n}\n.table[data-v-6abf849e] {\n  border-collapse: collapse;\n  width: calc(100% - 80px);\n  white-space: nowrap;\n  border-spacing: 0;\n  -ms-writing-mode: tb-lr;\n      writing-mode: vertical-lr;\n}\n.table tr[data-v-6abf849e] {\n  cursor: pointer;\n}\ntable tr[data-v-6abf849e]:hover {\n  background-color: #eee;\n}\n.table th[data-v-6abf849e],\n.table td[data-v-6abf849e] {\n  border: 0;\n  border-right: solid 1px #eee;\n  text-align: center;\n  -ms-writing-mode: lr-tb;\n      writing-mode: horizontal-tb;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.btn-false[data-v-6abf849e] {\n  color: #1f2937;\n  border: 1px solid #bbb;\n  width: 6rem;\n  padding: 0.25rem 0;\n}\n.btn-false[data-v-6abf849e]:hover {\n  border: 1px solid #222;\n}\n.btn-true[data-v-6abf849e] {\n  color: #0990cc;\n  border: 1px solid #0990cc;\n  width: 6rem;\n  padding: 0.25rem 0;\n}\n.btn-true[data-v-6abf849e]:hover {\n  border: 1px solid #f23e48;\n}\n.btn-true .hover[data-v-6abf849e] {\n  display: none;\n}\n.btn-true:hover .normal[data-v-6abf849e] {\n  display: none;\n}\n.btn-true:hover .hover[data-v-6abf849e] {\n  color: #f23e48;\n  display: inline;\n}\n.city-card[data-v-6abf849e] {\n  background-color: white;\n  box-shadow: 0 2px 5px #ccc;\n}\n.chart-area[data-v-6abf849e] {\n  padding: 1rem;\n  margin-top: 1rem;\n  background-color: white;\n  box-shadow: 0 2px 5px #ccc;\n}\n.table-area[data-v-6abf849e] {\n  margin-top: 1rem;\n  padding: 1rem;\n  background-color: white;\n  box-shadow: 0 2px 5px #ccc;\n}\n.scroll-table[data-v-6abf849e] {\n  overflow: auto;\n}\n.table[data-v-6abf849e] {\n  border-collapse: collapse;\n  width: calc(100% - 80px);\n  white-space: nowrap;\n  border-spacing: 0;\n  -ms-writing-mode: tb-lr;\n      writing-mode: vertical-lr;\n}\n.table tr[data-v-6abf849e] {\n  cursor: pointer;\n}\ntable tr[data-v-6abf849e]:hover {\n  background-color: #eee;\n}\n.table th[data-v-6abf849e],\n.table td[data-v-6abf849e] {\n  border: 0;\n  border-right: solid 1px #eee;\n  text-align: center;\n  -ms-writing-mode: lr-tb;\n      writing-mode: horizontal-tb;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
