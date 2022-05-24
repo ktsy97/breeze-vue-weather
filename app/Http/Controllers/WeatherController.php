@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Favorite;
 
 class WeatherController extends Controller
 {
@@ -69,6 +71,8 @@ class WeatherController extends Controller
 
     public function show($city_id)
     {
+        $user = Auth::user();
+
         $apiKey = config('services.weather.key');
 
         $method = "GET";
@@ -91,12 +95,27 @@ class WeatherController extends Controller
             $chart_temp[] = $forecast["list"][$i]["main"]["temp"];
         }
 
+        $favorite = Favorite::where([
+            ['user_id', $user->id],
+            ['city_id', $city_id]
+        ])->first();
+
+        if (!isset($favorite)) {
+            // レコードが存在しなければ、false
+            $result = false;
+        } else {
+            // レコードが存在すれば、true
+            $result = true;
+        }
+
         return Inertia::render('CityShow', [
             'current' => $current,
             'forecast' => $forecast,
             'date' => $date,
             'chart_date' => $chart_date,
             'chart_temp' => $chart_temp,
+            'result' => $result,
+            'city_id' => $city_id,
         ]);
     }
 }
