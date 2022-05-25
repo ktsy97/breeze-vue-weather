@@ -23824,7 +23824,7 @@ var __default__ = {
   methods: {
     select: function select(e) {
       this.val = e.target.value;
-      this.$inertia.visit(route("example.select"), {
+      this.$inertia.visit(route("city.select"), {
         method: "post",
         //POSTメソッドで送信
         data: {

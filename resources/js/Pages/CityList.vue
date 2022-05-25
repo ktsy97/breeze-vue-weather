@@ -112,7 +112,7 @@ export default {
   methods: {
     select: function (e) {
       this.val = e.target.value;
-      this.$inertia.visit(route("example.select"), {
+      this.$inertia.visit(route("city.select"), {
         method: "post", //POSTメソッドで送信
         data: {
           area: this.val, //送信データを指定

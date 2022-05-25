@@ -15,21 +15,8 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
-
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::get('/list', [App\Http\Controllers\WeatherController::class, 'index'])->middleware(['auth', 'verified'])->name('city.list');
-Route::post('/list', [App\Http\Controllers\WeatherController::class, 'index'])->name('example.select');
+Route::get('/', [App\Http\Controllers\WeatherController::class, 'index'])->middleware(['auth', 'verified'])->name('city.list');
+Route::post('/', [App\Http\Controllers\WeatherController::class, 'index'])->name('city.select');
 Route::get('/city/{city_id}', [App\Http\Controllers\WeatherController::class, 'show'])->middleware(['auth', 'verified'])->name('city.show');
 Route::post('/city/fav', [App\Http\Controllers\FavoriteController::class, 'fav'])->name('city.fav');
 
