@@ -1,10 +1,3 @@
-<script setup>
-import BreezeAuthenticatedLayout from "@/Layouts/Authenticated.vue";
-import { Head, Link } from "@inertiajs/inertia-vue3";
-import BreezeButton from "@/Components/Button.vue";
-import BreezeLabel from "@/Components/Label.vue";
-</script>
-
 <template>
   <Head title="プロフィール" />
 
@@ -26,7 +19,7 @@ import BreezeLabel from "@/Components/Label.vue";
                 <input
                   class="input"
                   id="name"
-                  value="example-name"
+                  :value="user.name"
                   type="text"
                 />
               </div>
@@ -36,7 +29,7 @@ import BreezeLabel from "@/Components/Label.vue";
                   class="input"
                   id="email"
                   type="email"
-                  value="example@example.com"
+                  :value="user.email"
                 />
                 <div class="mt-4">
                   <BreezeLabel for="password" value="Password" />
@@ -87,3 +80,14 @@ import BreezeLabel from "@/Components/Label.vue";
   border-color: rgb(165 180 252);
 }
 </style>
+
+<script setup>
+import BreezeAuthenticatedLayout from "@/Layouts/Authenticated.vue";
+import { Head, Link } from "@inertiajs/inertia-vue3";
+import BreezeButton from "@/Components/Button.vue";
+import BreezeLabel from "@/Components/Label.vue";
+
+defineProps({
+  user: Object,
+});
+</script>
