@@ -22441,14 +22441,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Layouts_Authenticated_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/Layouts/Authenticated.vue */ "./resources/js/Layouts/Authenticated.vue");
 /* harmony import */ var _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @inertiajs/inertia */ "./node_modules/@inertiajs/inertia/dist/index.js");
 var __default__ = {
-  props: {
-    data: {
-      type: Array
-    },
-    data_status: {
-      type: Boolean
-    }
-  },
   methods: {
     select: function select(e) {
       this.val = e.target.value;
@@ -22467,8 +22459,11 @@ var __default__ = {
 
 
 
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (/*#__PURE__*/Object.assign(__default__, {
+  props: {
+    data: Array,
+    data_status: Boolean
+  },
   setup: function setup(__props, _ref) {
     var expose = _ref.expose;
     expose();

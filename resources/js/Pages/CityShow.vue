@@ -1,18 +1,3 @@
-<script setup>
-import { Head } from "@inertiajs/inertia-vue3";
-import BreezeAuthenticatedLayout from "@/Layouts/Authenticated.vue";
-import { Inertia } from "@inertiajs/inertia";
-defineProps({
-  current: Object,
-  forecast: Object,
-  date: Array,
-  chart_date: Array,
-  chart_temp: Array,
-  result: Boolean,
-  city_id: String,
-});
-</script>
-
 <template>
   <Head :title="`${current.name}`" />
 
@@ -166,6 +151,22 @@ table tr:hover {
   writing-mode: horizontal-tb;
 }
 </style>
+
+<script setup>
+import { Head } from "@inertiajs/inertia-vue3";
+import BreezeAuthenticatedLayout from "@/Layouts/Authenticated.vue";
+import { Inertia } from "@inertiajs/inertia";
+
+defineProps({
+  current: Object,
+  forecast: Object,
+  date: Array,
+  chart_date: Array,
+  chart_temp: Array,
+  result: Boolean,
+  city_id: String,
+});
+</script>
 
 <script>
 import { Chart, registerables } from "chart.js";
