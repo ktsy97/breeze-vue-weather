@@ -65,6 +65,7 @@
                   class="text-red-600 hover:underline"
                   tabindex="-1"
                   type="button"
+                  @click="destroy"
                 >
                   Delete User
                 </button>
@@ -135,9 +136,14 @@ export default {
   },
   methods: {
     update() {
-      this.form.post(`/user`, {
+      this.form.post(route('user.update'), {
         onSuccess: () => this.form.reset("password"),
       });
+    },
+    destroy() {
+      if (confirm("このユーザーを削除してもよろしいですか？")) {
+        this.$inertia.delete(route('user.destroy'));
+      }
     },
   },
 };

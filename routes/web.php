@@ -22,5 +22,6 @@ Route::post('/city/fav', [App\Http\Controllers\FavoriteController::class, 'fav']
 
 Route::get('/user', [App\Http\Controllers\UserController::class, 'show'])->middleware(['auth', 'verified'])->name('user.show');
 Route::post('/user', [App\Http\Controllers\UserController::class, 'update'])->middleware(['auth', 'verified'])->name('user.update');
+Route::delete('/user', [App\Http\Controllers\UserController::class, 'destroy'])->middleware(['auth', 'verified'])->name('user.destroy');
 
 require __DIR__.'/auth.php';

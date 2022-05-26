@@ -51,4 +51,13 @@ class UserController extends Controller
 
         return Redirect::back()->with('success', 'User updated.');
     }
+
+    public function destroy()
+    {
+        $user = Auth::user();
+
+        $user->delete();
+
+        return Redirect::back()->with('success', 'User deleted.');
+    }
 }
