@@ -1,10 +1,3 @@
-<script setup>
-import { Head } from "@inertiajs/inertia-vue3";
-import { Link } from "@inertiajs/inertia-vue3";
-import BreezeAuthenticatedLayout from "@/Layouts/Authenticated.vue";
-import { Inertia } from "@inertiajs/inertia";
-</script>
-
 <template>
   <Head title="一覧" />
 
@@ -31,7 +24,10 @@ import { Inertia } from "@inertiajs/inertia";
         </div>
 
         <!-- カード一覧 -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
+          v-if="data_status"
+        >
           <!-- カード -->
           <div class="col" v-for="(item, index) in data" :key="index">
             <Link :href="route('city.show', { city_id: item.id })">
@@ -52,6 +48,9 @@ import { Inertia } from "@inertiajs/inertia";
             </Link>
           </div>
         </div>
+        <div class="text-center" v-else>
+          <p>お気に入りは登録されていません</p>
+        </div>
       </div>
     </div>
   </BreezeAuthenticatedLayout>
@@ -62,48 +61,49 @@ import { Inertia } from "@inertiajs/inertia";
   margin: 1rem auto;
   width: 100%;
 }
-
 .card-wrapper:hover {
   transform: translateY(-5px);
   box-shadow: 0 7px 34px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
   transition: all 0.5s;
 }
-
 .city-card {
   background-color: white;
   text-align: center;
   box-shadow: 0 2px 5px #ccc;
   max-width: 32rem;
 }
-
 .city-card-title {
   font-size: 1.2rem;
   font-weight: 600;
   color: #212529;
   transition: color 0.5s;
 }
-
 .city-card-text {
   color: #5b6268;
   transition: color 0.5s;
 }
-
 .city-card:hover .city-card-text {
   color: #495057;
 }
 </style>
 
+<script setup>
+import { Head, Link } from "@inertiajs/inertia-vue3";
+import BreezeAuthenticatedLayout from "@/Layouts/Authenticated.vue";
+import { Inertia } from "@inertiajs/inertia";
+
+defineProps({
+  data: Array,
+  data_status: Boolean,
+});
+</script>
+
 <script>
 export default {
-  props: {
-    data: {
-      type: Array,
-    },
-  },
   methods: {
     select: function (e) {
       this.val = e.target.value;
-      this.$inertia.visit(route("example.select"), {
+      this.$inertia.visit(route("city.select"), {
         method: "post", //POSTメソッドで送信
         data: {
           area: this.val, //送信データを指定

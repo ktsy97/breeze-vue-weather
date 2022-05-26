@@ -1,24 +1,20 @@
-<script setup>
-import { Head } from "@inertiajs/inertia-vue3";
-import BreezeAuthenticatedLayout from "@/Layouts/Authenticated.vue";
-import { Inertia } from "@inertiajs/inertia";
-defineProps({
-  current: Object,
-  forecast: Object,
-  date: Array,
-  chart_date: Array,
-  chart_temp: Array,
-});
-</script>
-
 <template>
   <Head :title="`${current.name}`" />
 
   <BreezeAuthenticatedLayout>
     <template #header>
-      <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        {{ current.name }}
-      </h2>
+      <div class="flex items-center">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+          {{ current.name }}
+        </h2>
+        <button class="btn-true rounded ml-3 text-sm font-semibold" v-on:click="fav" v-if="status">
+          <span class="normal">登録中</span>
+          <span class="hover">登録解除</span>
+        </button>
+        <button class="btn-false rounded ml-3 text-sm font-semibold" v-on:click="fav" v-else>
+          登録
+        </button>
+      </div>
     </template>
 
     <div class="py-12">
@@ -87,6 +83,34 @@ defineProps({
 </template>
 
 <style scoped>
+.btn-false {
+  color: #1f2937;
+  border: 1px solid #bbb;
+  width: 6rem;
+  padding: 0.25rem 0;
+}
+.btn-false:hover {
+  border: 1px solid #222;
+}
+.btn-true {
+  color: #0990cc;
+  border: 1px solid #0990cc;
+  width: 6rem;
+  padding: 0.25rem 0;
+}
+.btn-true:hover {
+  border: 1px solid #f23e48;
+}
+.btn-true .hover {
+  display: none;
+}
+.btn-true:hover .normal {
+  display: none;
+}
+.btn-true:hover .hover {
+  color: #f23e48;
+  display: inline;
+}
 .city-card {
   background-color: white;
   box-shadow: 0 2px 5px #ccc;
@@ -128,6 +152,22 @@ table tr:hover {
 }
 </style>
 
+<script setup>
+import { Head } from "@inertiajs/inertia-vue3";
+import BreezeAuthenticatedLayout from "@/Layouts/Authenticated.vue";
+import { Inertia } from "@inertiajs/inertia";
+
+defineProps({
+  current: Object,
+  forecast: Object,
+  date: Array,
+  chart_date: Array,
+  chart_temp: Array,
+  result: Boolean,
+  city_id: String,
+});
+</script>
+
 <script>
 import { Chart, registerables } from "chart.js";
 import { defineComponent } from "vue";
@@ -136,6 +176,11 @@ import { PieChart, LineChart } from "vue-chart-3";
 Chart.register(...registerables);
 
 export default defineComponent({
+  data() {
+    return {
+      status: this.result,
+    };
+  },
   components: {
     PieChart,
     LineChart,
@@ -154,6 +199,23 @@ export default defineComponent({
           },
         ],
       };
+    },
+  },
+  methods: {
+    fav: function (e) {
+      axios
+        .post("/city/fav", {
+          status: this.status,
+          city_id: this.city_id,
+        })
+        .then(
+          function (res) {
+            this.status = res.data;
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error);
+        });
     },
   },
 });
