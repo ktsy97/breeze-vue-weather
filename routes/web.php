@@ -21,5 +21,6 @@ Route::get('/city/{city_id}', [App\Http\Controllers\WeatherController::class, 's
 Route::post('/city/fav', [App\Http\Controllers\FavoriteController::class, 'fav'])->name('city.fav');
 
 Route::get('/user', [App\Http\Controllers\UserController::class, 'show'])->middleware(['auth', 'verified'])->name('user.show');
+Route::post('/user', [App\Http\Controllers\UserController::class, 'update'])->middleware(['auth', 'verified'])->name('user.update');
 
 require __DIR__.'/auth.php';
