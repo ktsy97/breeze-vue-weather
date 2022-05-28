@@ -22644,7 +22644,6 @@ var __default__ = {
   data: function data() {
     return {
       form: this.$inertia.form({
-        _method: "post",
         name: this.user.name,
         email: this.user.email,
         password: ""
@@ -22655,7 +22654,9 @@ var __default__ = {
     update: function update() {
       var _this = this;
 
-      this.form.post(route('user.update'), {
+      this.form.post(route("user.update", {
+        user: this.user.id
+      }), {
         onSuccess: function onSuccess() {
           return _this.form.reset("password");
         }
@@ -22663,7 +22664,9 @@ var __default__ = {
     },
     destroy: function destroy() {
       if (confirm("このユーザーを削除してもよろしいですか？")) {
-        this.$inertia["delete"](route('user.destroy'));
+        this.form["delete"](route("user.destroy", {
+          user: this.user.id
+        }));
       }
     }
   }
