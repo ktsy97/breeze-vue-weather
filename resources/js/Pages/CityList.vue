@@ -60,6 +60,7 @@
 .card-wrapper {
   margin: 1rem auto;
   width: 100%;
+  max-width: 32rem;
 }
 .card-wrapper:hover {
   transform: translateY(-5px);
@@ -70,7 +71,6 @@
   background-color: white;
   text-align: center;
   box-shadow: 0 2px 5px #ccc;
-  max-width: 32rem;
 }
 .city-card-title {
   font-size: 1.2rem;
@@ -108,6 +108,7 @@ export default {
         data: {
           area: this.val, //送信データを指定
         },
+        only: ["data", "data_status"],
         preserveState: true,
       });
     },
