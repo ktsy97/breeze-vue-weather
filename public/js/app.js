@@ -22451,6 +22451,7 @@ var __default__ = {
           area: this.val //送信データを指定
 
         },
+        only: ["data", "data_status"],
         preserveState: true
       });
     }
@@ -22543,7 +22544,7 @@ var __default__ = (0,vue__WEBPACK_IMPORTED_MODULE_1__.defineComponent)({
   },
   methods: {
     fav: function fav(e) {
-      axios.post("/city/fav", {
+      axios.post(route("city.fav"), {
         status: this.status,
         city_id: this.city_id
       }).then(function (res) {
@@ -38399,7 +38400,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.card-wrapper[data-v-2f075ad2] {\n  margin: 1rem auto;\n  width: 100%;\n}\n.card-wrapper[data-v-2f075ad2]:hover {\n  transform: translateY(-5px);\n  box-shadow: 0 7px 34px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);\n  transition: all 0.5s;\n}\n.city-card[data-v-2f075ad2] {\n  background-color: white;\n  text-align: center;\n  box-shadow: 0 2px 5px #ccc;\n  max-width: 32rem;\n}\n.city-card-title[data-v-2f075ad2] {\n  font-size: 1.2rem;\n  font-weight: 600;\n  color: #212529;\n  transition: color 0.5s;\n}\n.city-card-text[data-v-2f075ad2] {\n  color: #5b6268;\n  transition: color 0.5s;\n}\n.city-card:hover .city-card-text[data-v-2f075ad2] {\n  color: #495057;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.card-wrapper[data-v-2f075ad2] {\n  margin: 1rem auto;\n  width: 100%;\n  max-width: 32rem;\n}\n.card-wrapper[data-v-2f075ad2]:hover {\n  transform: translateY(-5px);\n  box-shadow: 0 7px 34px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);\n  transition: all 0.5s;\n}\n.city-card[data-v-2f075ad2] {\n  background-color: white;\n  text-align: center;\n  box-shadow: 0 2px 5px #ccc;\n}\n.city-card-title[data-v-2f075ad2] {\n  font-size: 1.2rem;\n  font-weight: 600;\n  color: #212529;\n  transition: color 0.5s;\n}\n.city-card-text[data-v-2f075ad2] {\n  color: #5b6268;\n  transition: color 0.5s;\n}\n.city-card:hover .city-card-text[data-v-2f075ad2] {\n  color: #495057;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

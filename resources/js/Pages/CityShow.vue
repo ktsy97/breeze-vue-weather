@@ -204,7 +204,7 @@ export default defineComponent({
   methods: {
     fav: function (e) {
       axios
-        .post("/city/fav", {
+        .post(route("city.fav"), {
           status: this.status,
           city_id: this.city_id,
         })
