@@ -2,21 +2,60 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Favorite;
+use Illuminate\Support\Facades\Request;
 
 class WeatherController extends Controller
 {
-    public function index(Request $request)
+    public function list_view($city_ids)
+    {
+        $apiKey = config('services.weather.key');
+        $method = "GET";
+        $client = new Client();
+
+        if (empty($city_ids)) {
+            // 配列が空である場合
+            $data = [];
+
+            $data_status = false;
+        } else {
+            // 配列が空でない場合
+            foreach ($city_ids as $city_id) {
+                $url = "http://api.openweathermap.org/data/2.5/weather?units=metric&lang=ja&id=$city_id&appid=$apiKey";
+                $response = $client->request($method, $url);
+                $data[] = json_decode($response->getBody(), true);
+            }
+
+            $data_status = true;
+        }
+
+        return Inertia::render('CityList', [
+            'data' => $data,
+            'data_status' => $data_status,
+        ]);
+    }
+
+    public function index()
     {
         $user = Auth::user();
 
-        $area = $request->area;
+        // お気に入り
+        $collection = Favorite::where('user_id', $user->id)->get();
+        $city_ids = $collection->pluck('city_id')->toArray();
 
-        switch ($area) {
+        $return = $this->list_view($city_ids);
+
+        return $return;
+    }
+
+    public function select()
+    {
+        $user = Auth::user();
+
+        switch (Request::get('area')) {
             case 1:
                 // 北海道・東北
                 // ['北海道', '青森県', '岩手県', '宮城県', '秋田県', '山形県', '福島県'];
@@ -61,31 +100,12 @@ class WeatherController extends Controller
                 // お気に入り
                 $collection = Favorite::where('user_id', $user->id)->get();
                 $city_ids = $collection->pluck('city_id')->toArray();
-
-                if (empty($city_ids)) {
-                    // 配列が空であれば、falseを返す
-                    return Inertia::render('CityList', [
-                        'data_status' => false,
-                    ]);
-                }
                 break;
         }
 
-        $apiKey = config('services.weather.key');
+        $return = $this->list_view($city_ids);
 
-        $method = "GET";
-        $client = new Client();
-
-        foreach ($city_ids as $city_id) {
-            $url = "http://api.openweathermap.org/data/2.5/weather?units=metric&lang=ja&id=$city_id&appid=$apiKey";
-            $response = $client->request($method, $url);
-            $data[] = json_decode($response->getBody(), true);
-        }
-
-        return Inertia::render('CityList', [
-            'data' => $data,
-            'data_status' => true,
-        ]);
+        return $return;
     }
 
     public function show($city_id)
@@ -93,7 +113,6 @@ class WeatherController extends Controller
         $user = Auth::user();
 
         $apiKey = config('services.weather.key');
-
         $method = "GET";
         $client = new Client();
 
@@ -105,10 +124,12 @@ class WeatherController extends Controller
         $forecast_response = $client->request($method, $forecast_url);
         $forecast = json_decode($forecast_response->getBody(), true);
 
+        // テーブルの日付のフォーマット
         foreach ($forecast["list"] as $item) {
             $date[] = date('Y/m/d H:i', $item["dt"]);
         }
 
+        // chartのlabelとdata
         for ($i = 0; $i <= 7; $i++) {
             $chart_date[] = date('H:i', $forecast["list"][$i]["dt"]);
             $chart_temp[] = $forecast["list"][$i]["main"]["temp"];
@@ -119,12 +140,13 @@ class WeatherController extends Controller
             ['city_id', $city_id]
         ])->first();
 
-        if (!isset($favorite)) {
-            // レコードが存在しなければ、false
-            $result = false;
-        } else {
+        // favoriteされているか判定
+        if (isset($favorite)) {
             // レコードが存在すれば、true
             $result = true;
+        } else {
+            // レコードが存在しなければ、false
+            $result = false;
         }
 
         return Inertia::render('CityShow', [

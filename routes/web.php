@@ -16,7 +16,7 @@ use Inertia\Inertia;
 */
 
 Route::get('/', [App\Http\Controllers\WeatherController::class, 'index'])->middleware(['auth'])->name('city.list');
-Route::post('/', [App\Http\Controllers\WeatherController::class, 'index'])->middleware(['auth'])->name('city.select');
+Route::post('/', [App\Http\Controllers\WeatherController::class, 'select'])->middleware(['auth'])->name('city.select');
 Route::get('/city/{city_id}', [App\Http\Controllers\WeatherController::class, 'show'])->middleware(['auth'])->name('city.show');
 Route::post('/city/fav', [App\Http\Controllers\FavoriteController::class, 'fav'])->middleware(['auth'])->name('city.fav');
 
