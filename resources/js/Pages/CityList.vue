@@ -26,7 +26,7 @@
         <!-- カード一覧 -->
         <div
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
-          v-if="data_status"
+          v-if="data.length"
         >
           <!-- カード -->
           <div class="col" v-for="(item, index) in data" :key="index">
@@ -39,9 +39,7 @@
                     天候:{{ item.weather[0].description }}
                   </p>
                   <p class="flex justify-center">
-                    <img
-                      :src="`http://openweathermap.org/img/wn/${item.weather[0].icon}.png`"
-                    />
+                    <img :src="`/img/weather/${item.weather[0].icon}.png`" />
                   </p>
                 </div>
               </div>
@@ -60,6 +58,7 @@
 .card-wrapper {
   margin: 1rem auto;
   width: 100%;
+  max-width: 32rem;
 }
 .card-wrapper:hover {
   transform: translateY(-5px);
@@ -70,7 +69,6 @@
   background-color: white;
   text-align: center;
   box-shadow: 0 2px 5px #ccc;
-  max-width: 32rem;
 }
 .city-card-title {
   font-size: 1.2rem;
@@ -94,7 +92,6 @@ import { Inertia } from "@inertiajs/inertia";
 
 defineProps({
   data: Array,
-  data_status: Boolean,
 });
 </script>
 
@@ -108,6 +105,7 @@ export default {
         data: {
           area: this.val, //送信データを指定
         },
+        only: ["data"],
         preserveState: true,
       });
     },

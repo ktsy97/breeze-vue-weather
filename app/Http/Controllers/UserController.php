@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
@@ -17,45 +18,33 @@ class UserController extends Controller
         $user = Auth::user();
 
         return Inertia::render('UserShow', [
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-            ],
+            'user' => $user,
         ]);
     }
 
-    public function update(Request $request)
+    public function update(User $user)
     {
-        $user = Auth::user();
+        Request::validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'password' => ['nullable'],
+        ]);
 
-        if ($request->password) {
-            $request->validate([
-                'name' => ['required', 'string', 'max:255'],
-                'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+        if (Request::get('password')) {
+            Request::validate([
                 'password' => [Rules\Password::defaults()],
             ]);
-            $user->password = Hash::make($request->password);
-        } else {
-            $request->validate([
-                'name' => ['required', 'string', 'max:255'],
-                'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
-                'password' => ['nullable'],
-            ]);
+
+            $user->update(['password' => Hash::make(Request::get('password'))]);
         }
 
-        $user->name = $request->name;
-        $user->email = $request->email;
-
-        $user->save();
+        $user->update(Request::only('name', 'email'));
 
         return Redirect::back()->with('success', 'User updated.');
     }
 
-    public function destroy()
+    public function destroy(User $user)
     {
-        $user = Auth::user();
-
         $user->delete();
 
         return Redirect::back()->with('success', 'User deleted.');
