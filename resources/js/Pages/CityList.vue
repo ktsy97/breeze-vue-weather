@@ -39,9 +39,7 @@
                     天候:{{ item.weather[0].description }}
                   </p>
                   <p class="flex justify-center">
-                    <img
-                      :src="`http://openweathermap.org/img/wn/${item.weather[0].icon}.png`"
-                    />
+                    <img :src="`/img/weather/${item.weather[0].icon}.png`" />
                   </p>
                 </div>
               </div>

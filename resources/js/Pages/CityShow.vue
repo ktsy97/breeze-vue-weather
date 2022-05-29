@@ -27,9 +27,7 @@
               <div class="col-span-1 text-center max-w-xs m-auto">
                 <p>天候:{{ current.weather[0].description }}</p>
                 <p class="flex justify-center">
-                  <img
-                    :src="`http://openweathermap.org/img/wn/${current.weather[0].icon}@2x.png`"
-                  />
+                  <img :src="`/img/weather/${current.weather[0].icon}@2x.png`" />
                 </p>
               </div>
               <div
