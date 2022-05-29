@@ -26,7 +26,7 @@
         <!-- カード一覧 -->
         <div
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
-          v-if="data_status"
+          v-if="data.length"
         >
           <!-- カード -->
           <div class="col" v-for="(item, index) in data" :key="index">
@@ -94,7 +94,6 @@ import { Inertia } from "@inertiajs/inertia";
 
 defineProps({
   data: Array,
-  data_status: Boolean,
 });
 </script>
 
@@ -108,7 +107,7 @@ export default {
         data: {
           area: this.val, //送信データを指定
         },
-        only: ["data", "data_status"],
+        only: ["data"],
         preserveState: true,
       });
     },

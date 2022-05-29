@@ -19,8 +19,6 @@ class WeatherController extends Controller
         if (empty($city_ids)) {
             // 配列が空である場合
             $data = [];
-
-            $data_status = false;
         } else {
             // 配列が空でない場合
             foreach ($city_ids as $city_id) {
@@ -28,13 +26,10 @@ class WeatherController extends Controller
                 $response = $client->request($method, $url);
                 $data[] = json_decode($response->getBody(), true);
             }
-
-            $data_status = true;
         }
 
         return Inertia::render('CityList', [
             'data' => $data,
-            'data_status' => $data_status,
         ]);
     }
 
