@@ -7,11 +7,19 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
           {{ current.name }}
         </h2>
-        <button class="btn-true rounded ml-3 text-sm font-semibold" v-on:click="fav" v-if="status">
+        <button
+          class="btn-true rounded ml-3 text-sm font-semibold"
+          v-on:click="fav"
+          v-if="status"
+        >
           <span class="normal">登録中</span>
           <span class="hover">登録解除</span>
         </button>
-        <button class="btn-false rounded ml-3 text-sm font-semibold" v-on:click="fav" v-else>
+        <button
+          class="btn-false rounded ml-3 text-sm font-semibold"
+          v-on:click="fav"
+          v-else
+        >
           登録
         </button>
       </div>
@@ -28,7 +36,7 @@
                 <p>天候:{{ current.weather[0].description }}</p>
                 <p class="flex justify-center">
                   <img
-                    :src="`http://openweathermap.org/img/wn/${current.weather[0].icon}@2x.png`"
+                    :src="`/img/weather/${current.weather[0].icon}@2x.png`"
                   />
                 </p>
               </div>
@@ -70,7 +78,13 @@
                   <td class="border px-4 py-2">{{ date[index] }}</td>
                   <td class="border px-4 py-2">{{ item.main.temp }}&deg;C</td>
                   <td class="border px-4 py-2">
-                    {{ item.weather[0].description }}
+                    <p>{{ item.weather[0].description }}</p>
+                    <p>
+                      <img
+                        class="mx-auto"
+                        :src="`/img/weather/${item.weather[0].icon}.png`"
+                      />
+                    </p>
                   </td>
                 </tr>
               </tbody>
@@ -204,7 +218,7 @@ export default defineComponent({
   methods: {
     fav: function (e) {
       axios
-        .post("/city/fav", {
+        .post(route("city.fav"), {
           status: this.status,
           city_id: this.city_id,
         })

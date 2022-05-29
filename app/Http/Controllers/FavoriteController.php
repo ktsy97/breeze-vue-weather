@@ -2,33 +2,35 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Favorite;
+use Illuminate\Support\Facades\Request;
 
 class FavoriteController extends Controller
 {
-    public function fav(Request $request)
+    public function fav()
     {
         $user = Auth::user();
-
-        $status = $request->status;
-        $city_id = $request->city_id;
+        $city_id = Request::get('city_id');
+        $status = Request::get('status');
 
         $favorite = Favorite::where([
             ['user_id', $user->id],
             ['city_id', $city_id]
-        ])->first();
+        ]);
 
         if ($status) {
             // trueならばレコードを削除,falseに変更
-            Favorite::destroy($favorite->id);
+            $favorite->delete();
+
             $result = false;
         } else {
             // falseならばレコードを追加,trueに変更
-            $record = new Favorite();
-            $record->fill(['city_id' => $city_id, 'user_id' => $user->id]);
-            $record->save();
+            Favorite::create([
+                'city_id' => $city_id,
+                'user_id' => $user->id,
+            ]);
+
             $result = true;
         }
 

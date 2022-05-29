@@ -11,6 +11,6 @@ class Favorite extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo('App\Model\User');
+        return $this->belongsTo(User::class);
     }
 }

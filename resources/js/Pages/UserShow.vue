@@ -127,7 +127,6 @@ export default {
   data() {
     return {
       form: this.$inertia.form({
-        _method: "post",
         name: this.user.name,
         email: this.user.email,
         password: "",
@@ -136,13 +135,13 @@ export default {
   },
   methods: {
     update() {
-      this.form.post(route('user.update'), {
+      this.form.post(route("user.update", { user: this.user.id }), {
         onSuccess: () => this.form.reset("password"),
       });
     },
     destroy() {
       if (confirm("このユーザーを削除してもよろしいですか？")) {
-        this.$inertia.delete(route('user.destroy'));
+        this.form.delete(route("user.destroy", { user: this.user.id }));
       }
     },
   },
