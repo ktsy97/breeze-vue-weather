@@ -7,21 +7,17 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
           {{ current.name }}
         </h2>
-        <button
-          class="btn-true rounded ml-3 text-sm font-semibold"
+        <BreezeFavoriteButton
+          :class="`btn__true`"
           v-on:click="fav"
           v-if="status"
         >
-          <span class="normal">登録中</span>
-          <span class="hover">登録解除</span>
-        </button>
-        <button
-          class="btn-false rounded ml-3 text-sm font-semibold"
-          v-on:click="fav"
-          v-else
-        >
+          <template #btn_text__normal>登録中</template>
+          <template #btn_text__hover>登録解除</template>
+        </BreezeFavoriteButton>
+        <BreezeFavoriteButton :class="`btn__false`" v-on:click="fav" v-else>
           登録
-        </button>
+        </BreezeFavoriteButton>
       </div>
     </template>
 
@@ -29,7 +25,7 @@
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <!-- 現在の天気エリア -->
         <div class="current-area">
-          <div class="city-card p-4 rounded-lg">
+          <BreezeCard>
             <h1 class="text-center text-lg mb-2">現在の天気</h1>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div class="col-span-1 text-center max-w-xs m-auto">
@@ -52,44 +48,48 @@
                 </div>
               </div>
             </div>
-          </div>
+          </BreezeCard>
         </div>
 
         <!-- 24時間の気温エリア -->
-        <div class="chart-area rounded-lg">
-          <h1 class="text-center text-lg mb-2">24時間の気温</h1>
-          <LineChart :chartData="lineData" />
+        <div class="chart-area mt-4">
+          <BreezeCard>
+            <h1 class="text-center text-lg mb-2">24時間の気温</h1>
+            <LineChart :chartData="lineData" />
+          </BreezeCard>
         </div>
 
         <!-- 5日間の天気予想エリア -->
-        <div class="table-area rounded-lg">
-          <h1 class="text-center text-lg mb-2">5日間の天気予想</h1>
-          <div class="scroll-table">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th class="px-4 py-2">日時</th>
-                  <th class="px-4 py-2">気温</th>
-                  <th class="px-4 py-2">天候</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(item, index) in forecast.list" :key="index">
-                  <td class="border px-4 py-2">{{ date[index] }}</td>
-                  <td class="border px-4 py-2">{{ item.main.temp }}&deg;C</td>
-                  <td class="border px-4 py-2">
-                    <p>{{ item.weather[0].description }}</p>
-                    <p>
-                      <img
-                        class="mx-auto"
-                        :src="`/img/weather/${item.weather[0].icon}.png`"
-                      />
-                    </p>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+        <div class="table-area mt-4">
+          <BreezeCard>
+            <h1 class="text-center text-lg mb-2">5日間の天気予想</h1>
+            <div class="scroll-table">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th class="px-4 py-2">日時</th>
+                    <th class="px-4 py-2">気温</th>
+                    <th class="px-4 py-2">天候</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(item, index) in forecast.list" :key="index">
+                    <td class="border px-4 py-2">{{ date[index] }}</td>
+                    <td class="border px-4 py-2">{{ item.main.temp }}&deg;C</td>
+                    <td class="border px-4 py-2">
+                      <p>{{ item.weather[0].description }}</p>
+                      <p>
+                        <img
+                          class="mx-auto"
+                          :src="`/img/weather/${item.weather[0].icon}.png`"
+                        />
+                      </p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </BreezeCard>
         </div>
       </div>
     </div>
@@ -97,49 +97,15 @@
 </template>
 
 <style scoped>
-.btn-false {
-  color: #1f2937;
-  border: 1px solid #bbb;
-  width: 6rem;
-  padding: 0.25rem 0;
-}
-.btn-false:hover {
-  border: 1px solid #222;
-}
-.btn-true {
-  color: #0990cc;
-  border: 1px solid #0990cc;
-  width: 6rem;
-  padding: 0.25rem 0;
-}
-.btn-true:hover {
-  border: 1px solid #f23e48;
-}
-.btn-true .hover {
+.btn__true .hover {
   display: none;
 }
-.btn-true:hover .normal {
+.btn__true:hover .normal {
   display: none;
 }
-.btn-true:hover .hover {
+.btn__true:hover .hover {
   color: #f23e48;
   display: inline;
-}
-.city-card {
-  background-color: white;
-  box-shadow: 0 2px 5px #ccc;
-}
-.chart-area {
-  padding: 1rem;
-  margin-top: 1rem;
-  background-color: white;
-  box-shadow: 0 2px 5px #ccc;
-}
-.table-area {
-  margin-top: 1rem;
-  padding: 1rem;
-  background-color: white;
-  box-shadow: 0 2px 5px #ccc;
 }
 .scroll-table {
   overflow: auto;
@@ -154,7 +120,7 @@
 .table tr {
   cursor: pointer;
 }
-table tr:hover {
+.table tr:hover {
   background-color: #eee;
 }
 .table th,
@@ -170,6 +136,8 @@ table tr:hover {
 import { Head } from "@inertiajs/inertia-vue3";
 import BreezeAuthenticatedLayout from "@/Layouts/Authenticated.vue";
 import { Inertia } from "@inertiajs/inertia";
+import BreezeCard from "@/Components/Card.vue";
+import BreezeFavoriteButton from "@/Components/FavoriteButton.vue";
 
 defineProps({
   current: Object,

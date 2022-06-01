@@ -31,18 +31,18 @@
           <!-- カード -->
           <div class="col" v-for="(item, index) in data" :key="index">
             <Link :href="route('city.show', { city_id: item.id })">
-              <div class="card-wrapper">
-                <div class="city-card p-4 rounded-lg">
-                  <p class="city-card-title mt-2 mb-3">{{ item.name }}</p>
-                  <p class="city-card-text">気温:{{ item.main.temp }}&deg;C</p>
-                  <p class="city-card-text">
-                    天候:{{ item.weather[0].description }}
-                  </p>
-                  <p class="flex justify-center">
-                    <img :src="`/img/weather/${item.weather[0].icon}.png`" />
-                  </p>
-                </div>
-              </div>
+              <BreezeHoverCard class="text-center">
+                <template #title>
+                  <p>{{ item.name }}</p>
+                </template>
+                <template #text>
+                  <p>気温:{{ item.main.temp }}&deg;C</p>
+                  <p>天候:{{ item.weather[0].description }}</p>
+                </template>
+                <p class="flex justify-center">
+                  <img :src="`/img/weather/${item.weather[0].icon}.png`" />
+                </p>
+              </BreezeHoverCard>
             </Link>
           </div>
         </div>
@@ -54,41 +54,11 @@
   </BreezeAuthenticatedLayout>
 </template>
 
-<style scoped>
-.card-wrapper {
-  margin: 1rem auto;
-  width: 100%;
-  max-width: 32rem;
-}
-.card-wrapper:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 7px 34px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
-  transition: all 0.5s;
-}
-.city-card {
-  background-color: white;
-  text-align: center;
-  box-shadow: 0 2px 5px #ccc;
-}
-.city-card-title {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #212529;
-  transition: color 0.5s;
-}
-.city-card-text {
-  color: #5b6268;
-  transition: color 0.5s;
-}
-.city-card:hover .city-card-text {
-  color: #495057;
-}
-</style>
-
 <script setup>
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import BreezeAuthenticatedLayout from "@/Layouts/Authenticated.vue";
 import { Inertia } from "@inertiajs/inertia";
+import BreezeHoverCard from "@/Components/HoverCard.vue";
 
 defineProps({
   data: Array,
