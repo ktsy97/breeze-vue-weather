@@ -21,53 +21,49 @@
       </div>
     </template>
 
-    <div class="py-12">
-      <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <!-- 現在の天気エリア -->
-        <div class="current-area">
-          <BreezeCard>
-            <template #card_title>現在の天気</template>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div class="col-span-1 text-center max-w-xs m-auto">
-                <p>天候:{{ current.weather[0].description }}</p>
-                <p class="flex justify-center">
-                  <img
-                    :src="`/img/weather/${current.weather[0].icon}@2x.png`"
-                  />
-                </p>
-              </div>
-              <div
-                class="col-span-1 flex flex-col justify-center max-w-xs m-auto"
-              >
-                <div class="inline-block">
-                  <p>気温:{{ current.main.temp }}&deg;C</p>
-                  <p>体感気温:{{ current.main.feels_like }}&deg;C</p>
-                  <p>大気圧:{{ current.main.pressure }}hPa</p>
-                  <p>湿度:{{ current.main.humidity }}%</p>
-                  <p>風速:{{ current.wind.speed }}メートル/秒</p>
-                </div>
-              </div>
+    <!-- 現在の天気エリア -->
+    <div class="current-area">
+      <BreezeCard>
+        <template #card_title>現在の天気</template>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="col-span-1 text-center max-w-xs m-auto">
+            <p>天候:{{ current.weather[0].description }}</p>
+            <p class="flex justify-center">
+              <img :src="`/img/weather/${current.weather[0].icon}@2x.png`" />
+            </p>
+          </div>
+          <div class="col-span-1 flex flex-col justify-center max-w-xs m-auto">
+            <div class="inline-block">
+              <p>気温:{{ current.main.temp }}&deg;C</p>
+              <p>体感気温:{{ current.main.feels_like }}&deg;C</p>
+              <p>大気圧:{{ current.main.pressure }}hPa</p>
+              <p>湿度:{{ current.main.humidity }}%</p>
+              <p>風速:{{ current.wind.speed }}メートル/秒</p>
             </div>
-          </BreezeCard>
+          </div>
         </div>
+      </BreezeCard>
+    </div>
 
-        <!-- 24時間の気温エリア -->
-        <div class="chart-area mt-4">
-          <BreezeCard>
-            <template #card_title>24時間の気温</template>
-            <LineChart :chartData="lineData" />
-          </BreezeCard>
-        </div>
+    <!-- 24時間の気温エリア -->
+    <div class="chart-area mt-4">
+      <BreezeCard>
+        <template #card_title>24時間の気温</template>
+        <LineChart :chartData="lineData" />
+      </BreezeCard>
+    </div>
 
-        <!-- 5日間の天気予想エリア -->
-        <div class="table-area mt-4">
-          <BreezeCard>
-            <template #card_title>5日間の天気予想</template>
-            <BreezeScrollTable :columns="columns" :rows="forecast.list" :date="date">
-            </BreezeScrollTable>
-          </BreezeCard>
-        </div>
-      </div>
+    <!-- 5日間の天気予想エリア -->
+    <div class="table-area mt-4">
+      <BreezeCard>
+        <template #card_title>5日間の天気予想</template>
+        <BreezeScrollTable
+          :columns="columns"
+          :rows="forecast.list"
+          :date="date"
+        >
+        </BreezeScrollTable>
+      </BreezeCard>
     </div>
   </BreezeAuthenticatedLayout>
 </template>
