@@ -26,7 +26,7 @@
         <!-- 現在の天気エリア -->
         <div class="current-area">
           <BreezeCard>
-            <h1 class="text-center text-lg mb-2">現在の天気</h1>
+            <template #card_title>現在の天気</template>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div class="col-span-1 text-center max-w-xs m-auto">
                 <p>天候:{{ current.weather[0].description }}</p>
@@ -54,7 +54,7 @@
         <!-- 24時間の気温エリア -->
         <div class="chart-area mt-4">
           <BreezeCard>
-            <h1 class="text-center text-lg mb-2">24時間の気温</h1>
+            <template #card_title>24時間の気温</template>
             <LineChart :chartData="lineData" />
           </BreezeCard>
         </div>
@@ -62,7 +62,7 @@
         <!-- 5日間の天気予想エリア -->
         <div class="table-area mt-4">
           <BreezeCard>
-            <h1 class="text-center text-lg mb-2">5日間の天気予想</h1>
+            <template #card_title>5日間の天気予想</template>
             <div class="scroll-table">
               <table class="table">
                 <thead>
@@ -97,16 +97,6 @@
 </template>
 
 <style scoped>
-.btn__true .hover {
-  display: none;
-}
-.btn__true:hover .normal {
-  display: none;
-}
-.btn__true:hover .hover {
-  color: #f23e48;
-  display: inline;
-}
 .scroll-table {
   overflow: auto;
 }
