@@ -63,32 +63,8 @@
         <div class="table-area mt-4">
           <BreezeCard>
             <template #card_title>5日間の天気予想</template>
-            <div class="scroll-table">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th class="px-4 py-2">日時</th>
-                    <th class="px-4 py-2">気温</th>
-                    <th class="px-4 py-2">天候</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(item, index) in forecast.list" :key="index">
-                    <td class="border px-4 py-2">{{ date[index] }}</td>
-                    <td class="border px-4 py-2">{{ item.main.temp }}&deg;C</td>
-                    <td class="border px-4 py-2">
-                      <p>{{ item.weather[0].description }}</p>
-                      <p>
-                        <img
-                          class="mx-auto"
-                          :src="`/img/weather/${item.weather[0].icon}.png`"
-                        />
-                      </p>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <BreezeScrollTable :columns="columns" :rows="forecast.list" :date="date">
+            </BreezeScrollTable>
           </BreezeCard>
         </div>
       </div>
@@ -96,38 +72,13 @@
   </BreezeAuthenticatedLayout>
 </template>
 
-<style scoped>
-.scroll-table {
-  overflow: auto;
-}
-.table {
-  border-collapse: collapse;
-  width: calc(100% - 80px);
-  white-space: nowrap;
-  border-spacing: 0;
-  writing-mode: vertical-lr;
-}
-.table tr {
-  cursor: pointer;
-}
-.table tr:hover {
-  background-color: #eee;
-}
-.table th,
-.table td {
-  border: 0;
-  border-right: solid 1px #eee;
-  text-align: center;
-  writing-mode: horizontal-tb;
-}
-</style>
-
 <script setup>
 import { Head } from "@inertiajs/inertia-vue3";
 import BreezeAuthenticatedLayout from "@/Layouts/Authenticated.vue";
 import { Inertia } from "@inertiajs/inertia";
 import BreezeCard from "@/Components/Card.vue";
 import BreezeFavoriteButton from "@/Components/FavoriteButton.vue";
+import BreezeScrollTable from "@/Components/ScrollTable.vue";
 
 defineProps({
   current: Object,
@@ -151,6 +102,7 @@ export default defineComponent({
   data() {
     return {
       status: this.result,
+      columns: ["日時", "気温", "天候"],
     };
   },
   components: {
