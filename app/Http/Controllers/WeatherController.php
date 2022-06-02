@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Inertia\Inertia;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Favorite;
 use Illuminate\Support\Facades\Request;
 
 class WeatherController extends Controller
@@ -38,8 +38,7 @@ class WeatherController extends Controller
         $user = Auth::user();
 
         // お気に入り
-        $collection = Favorite::where('user_id', $user->id)->get();
-        $city_ids = $collection->pluck('city_id')->toArray();
+        $city_ids = $user->favorite()->pluck('city_id')->toArray();
 
         $return = $this->list_view($city_ids);
 
@@ -93,8 +92,7 @@ class WeatherController extends Controller
                 break;
             default:
                 // お気に入り
-                $collection = Favorite::where('user_id', $user->id)->get();
-                $city_ids = $collection->pluck('city_id')->toArray();
+                $city_ids = $user->favorite()->pluck('city_id')->toArray();
                 break;
         }
 
@@ -111,13 +109,20 @@ class WeatherController extends Controller
         $method = "GET";
         $client = new Client();
 
-        $current_url = "http://api.openweathermap.org/data/2.5/weather?units=metric&lang=ja&id=$city_id&appid=$apiKey";
-        $current_response = $client->request($method, $current_url);
-        $current = json_decode($current_response->getBody(), true);
+        try {
+            // 現在の天気
+            $current_url = "http://api.openweathermap.org/data/2.5/weather?units=metric&lang=ja&id=$city_id&appid=$apiKey";
+            $current_response = $client->request($method, $current_url);
+            $current = json_decode($current_response->getBody(), true);
 
-        $forecast_url = "http://api.openweathermap.org/data/2.5/forecast?units=metric&lang=ja&id=$city_id&appid=$apiKey";
-        $forecast_response = $client->request($method, $forecast_url);
-        $forecast = json_decode($forecast_response->getBody(), true);
+            // 天気予報
+            $forecast_url = "http://api.openweathermap.org/data/2.5/forecast?units=metric&lang=ja&id=$city_id&appid=$apiKey";
+            $forecast_response = $client->request($method, $forecast_url);
+            $forecast = json_decode($forecast_response->getBody(), true);
+        } catch (Exception $e) {
+            // 存在しないcity_idが入力された場合は404を返す
+            return abort(404);
+        }
 
         // テーブルの日付のフォーマット
         foreach ($forecast["list"] as $item) {
@@ -130,10 +135,7 @@ class WeatherController extends Controller
             $chart_temp[] = $forecast["list"][$i]["main"]["temp"];
         }
 
-        $favorite = Favorite::where([
-            ['user_id', $user->id],
-            ['city_id', $city_id]
-        ])->first();
+        $favorite = $user->favorite()->where('city_id', $city_id)->first();
 
         // favoriteされているか判定
         if (isset($favorite)) {
