@@ -14,10 +14,7 @@ class FavoriteController extends Controller
         $city_id = Request::get('city_id');
         $status = Request::get('status');
 
-        $favorite = Favorite::where([
-            ['user_id', $user->id],
-            ['city_id', $city_id]
-        ]);
+        $favorite = $user->favorite()->where('city_id', $city_id);
 
         if ($status) {
             // trueならばレコードを削除,falseに変更
