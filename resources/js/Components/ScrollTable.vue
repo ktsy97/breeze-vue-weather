@@ -1,13 +1,17 @@
+<script setup>
+defineProps({
+  columns: Array,
+  rows: Object,
+  date: Array,
+});
+</script>
+
 <template>
   <div class="wrapper">
     <table class="table">
       <thead>
         <tr>
-          <th
-            class="table_th px-4 py-2"
-            v-for="(col, idx) in columns"
-            :key="idx"
-          >
+          <th class="table_th px-4 py-2" v-for="(col, idx) in columns" :key="idx">
             {{ col }}
           </th>
         </tr>
@@ -19,10 +23,7 @@
           <td class="table_td px-4 py-2">
             <p>{{ row.weather[0].description }}</p>
             <p>
-              <img
-                class="mx-auto"
-                :src="`/img/weather/${row.weather[0].icon}.png`"
-              />
+              <img class="mx-auto" :src="`/img/weather/${row.weather[0].icon}.png`" />
             </p>
           </td>
         </tr>
@@ -35,6 +36,7 @@
 .wrapper {
   overflow: auto;
 }
+
 .table {
   border-collapse: collapse;
   width: calc(100% - 80px);
@@ -42,12 +44,15 @@
   border-spacing: 0;
   writing-mode: vertical-lr;
 }
+
 .table_tr {
   cursor: pointer;
 }
+
 .table_tr:hover {
   background-color: #eee;
 }
+
 .table_th,
 .table_td {
   border: 0;
@@ -56,19 +61,3 @@
   writing-mode: horizontal-tb;
 }
 </style>
-
-<script>
-export default {
-  props: {
-    columns: {
-      type: Array,
-    },
-    rows: {
-      type: Object,
-    },
-    date: {
-      type: Array,
-    },
-  },
-};
-</script>

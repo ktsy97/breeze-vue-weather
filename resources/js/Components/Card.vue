@@ -15,6 +15,7 @@
   text-align: center;
   margin-bottom: 0.5rem;
 }
+
 .card_body {
   background-color: white;
   box-shadow: 0 2px 5px #ccc;

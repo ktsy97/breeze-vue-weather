@@ -1,4 +1,68 @@
+<script setup>
+import { Head } from "@inertiajs/inertia-vue3";
+import BreezeAuthenticatedLayout from "@/Layouts/Authenticated.vue";
+import BreezeCard from "@/Components/Card.vue";
+import BreezeFavoriteButton from "@/Components/FavoriteButton.vue";
+import BreezeScrollTable from "@/Components/ScrollTable.vue";
+import { Chart, registerables } from "chart.js";
+import { defineComponent, ref } from "vue";
+import { LineChart } from "vue-chart-3";
+
+Chart.register(...registerables);
+
+const props = defineProps({
+  current: Object,
+  forecast: Object,
+  date: Array,
+  chart_date: Array,
+  chart_temp: Array,
+  result: Boolean,
+  city_id: String,
+});
+
+const status = ref(props.result);
+const columns = ["日時", "気温", "天候"];
+
+const fav = () => {
+  axios
+    .post(route("city.fav"), {
+      status: status.value,
+      city_id: props.city_id,
+    })
+    .then(
+      function (res) {
+        status.value = res.data;
+      },
+    )
+    .catch(function (e) {
+      console.log(e);
+    });
+}
+</script>
+
+<script>
+export default defineComponent({
+  computed: {
+    lineData() {
+      return {
+        labels: this.chart_date,
+        datasets: [
+          {
+            label: "気温",
+            data: this.chart_temp,
+            fill: true,
+            borderColor: "rgb(75, 192, 192)",
+            tension: 0.1,
+          },
+        ],
+      };
+    },
+  },
+});
+</script>
+
 <template>
+
   <Head :title="`${current.name}`" />
 
   <BreezeAuthenticatedLayout>
@@ -7,11 +71,7 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
           {{ current.name }}
         </h2>
-        <BreezeFavoriteButton
-          :class="`btn__true`"
-          v-on:click="fav"
-          v-if="status"
-        >
+        <BreezeFavoriteButton :class="`btn__true`" v-on:click="fav" v-if="status">
           <template #btn_text__normal>登録中</template>
           <template #btn_text__hover>登録解除</template>
         </BreezeFavoriteButton>
@@ -57,86 +117,9 @@
     <div class="table-area mt-4">
       <BreezeCard>
         <template #card_title>5日間の天気予想</template>
-        <BreezeScrollTable
-          :columns="columns"
-          :rows="forecast.list"
-          :date="date"
-        >
+        <BreezeScrollTable :columns="columns" :rows="forecast.list" :date="date">
         </BreezeScrollTable>
       </BreezeCard>
     </div>
   </BreezeAuthenticatedLayout>
 </template>
-
-<script setup>
-import { Head } from "@inertiajs/inertia-vue3";
-import BreezeAuthenticatedLayout from "@/Layouts/Authenticated.vue";
-import { Inertia } from "@inertiajs/inertia";
-import BreezeCard from "@/Components/Card.vue";
-import BreezeFavoriteButton from "@/Components/FavoriteButton.vue";
-import BreezeScrollTable from "@/Components/ScrollTable.vue";
-
-defineProps({
-  current: Object,
-  forecast: Object,
-  date: Array,
-  chart_date: Array,
-  chart_temp: Array,
-  result: Boolean,
-  city_id: String,
-});
-</script>
-
-<script>
-import { Chart, registerables } from "chart.js";
-import { defineComponent } from "vue";
-import { PieChart, LineChart } from "vue-chart-3";
-
-Chart.register(...registerables);
-
-export default defineComponent({
-  data() {
-    return {
-      status: this.result,
-      columns: ["日時", "気温", "天候"],
-    };
-  },
-  components: {
-    PieChart,
-    LineChart,
-  },
-  computed: {
-    lineData() {
-      return {
-        labels: this.chart_date,
-        datasets: [
-          {
-            label: "気温",
-            data: this.chart_temp,
-            fill: true,
-            borderColor: "rgb(75, 192, 192)",
-            tension: 0.1,
-          },
-        ],
-      };
-    },
-  },
-  methods: {
-    fav: function (e) {
-      axios
-        .post(route("city.fav"), {
-          status: this.status,
-          city_id: this.city_id,
-        })
-        .then(
-          function (res) {
-            this.status = res.data;
-          }.bind(this)
-        )
-        .catch(function (error) {
-          console.log(error);
-        });
-    },
-  },
-});
-</script>

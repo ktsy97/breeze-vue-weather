@@ -1,4 +1,28 @@
+<script setup>
+import { Head, Link } from "@inertiajs/inertia-vue3";
+import BreezeAuthenticatedLayout from "@/Layouts/Authenticated.vue";
+import BreezeHoverCard from "@/Components/HoverCard.vue";
+import { Inertia } from '@inertiajs/inertia'
+
+defineProps({
+  data: Array,
+});
+
+const select = (e) => {
+  const val = e.target.value;
+  Inertia.visit(route("city.select"), {
+    method: "post", //POSTメソッドで送信
+    data: {
+      area: val, //送信データを指定
+    },
+    only: ["data"],
+    preserveState: true,
+  });
+}
+</script>
+
 <template>
+
   <Head title="一覧" />
 
   <BreezeAuthenticatedLayout>
@@ -22,25 +46,22 @@
     </div>
 
     <!-- カード一覧 -->
-    <div
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
-      v-if="data.length"
-    >
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" v-if="data.length">
       <!-- カード -->
       <div class="col" v-for="(item, index) in data" :key="index">
         <Link :href="route('city.show', { city_id: item.id })">
-          <BreezeHoverCard class="text-center">
-            <template #title>
-              <p>{{ item.name }}</p>
-            </template>
-            <template #text>
-              <p>気温:{{ item.main.temp }}&deg;C</p>
-              <p>天候:{{ item.weather[0].description }}</p>
-            </template>
-            <p class="flex justify-center">
-              <img :src="`/img/weather/${item.weather[0].icon}.png`" />
-            </p>
-          </BreezeHoverCard>
+        <BreezeHoverCard class="text-center">
+          <template #title>
+            <p>{{ item.name }}</p>
+          </template>
+          <template #text>
+            <p>気温:{{ item.main.temp }}&deg;C</p>
+            <p>天候:{{ item.weather[0].description }}</p>
+          </template>
+          <p class="flex justify-center">
+            <img :src="`/img/weather/${item.weather[0].icon}.png`" />
+          </p>
+        </BreezeHoverCard>
         </Link>
       </div>
     </div>
@@ -51,32 +72,3 @@
     </div>
   </BreezeAuthenticatedLayout>
 </template>
-
-<script setup>
-import { Head, Link } from "@inertiajs/inertia-vue3";
-import BreezeAuthenticatedLayout from "@/Layouts/Authenticated.vue";
-import { Inertia } from "@inertiajs/inertia";
-import BreezeHoverCard from "@/Components/HoverCard.vue";
-
-defineProps({
-  data: Array,
-});
-</script>
-
-<script>
-export default {
-  methods: {
-    select: function (e) {
-      this.val = e.target.value;
-      this.$inertia.visit(route("city.select"), {
-        method: "post", //POSTメソッドで送信
-        data: {
-          area: this.val, //送信データを指定
-        },
-        only: ["data"],
-        preserveState: true,
-      });
-    },
-  },
-};
-</script>
