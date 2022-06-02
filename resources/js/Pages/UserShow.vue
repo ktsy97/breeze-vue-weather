@@ -45,7 +45,7 @@ const destroy = () => {
     <div class="profile-area">
       <BreezeCard>
         <!-- フラッシュメッセージ -->
-        <flash-messages />
+        <FlashMessages />
 
         <form @submit.prevent="update">
           <!-- ユーザー名 -->
